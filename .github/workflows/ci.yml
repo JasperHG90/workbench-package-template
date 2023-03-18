@@ -71,7 +71,7 @@ jobs:
 
       - name: Generate docstring coverage report
         run: |
-          invoke instantiate-template
+          poetry run invoke instantiate-template
           poetry run interrogate -v .template/mypkg/src -o docstring_coverage.txt
 
       - name: Report docstring coverage
