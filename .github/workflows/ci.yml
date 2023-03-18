@@ -78,13 +78,12 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           COMMIT_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          sudo apt-get install -y jq
           export COVR=$(cat docstring_coverage.txt)
           export JSON=$(jq -n --arg ds "$COVR" '{"body": $ds}') 
           curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -X POST \
             https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments \
-            -d $JSON
+            -d "$JSON"
 
       # - name: Build docs
       #   if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main'}}
