@@ -17,11 +17,11 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  pull-requests: write
 
 jobs:
   # This job tests that the CC works
   ci:
-    permissions: write-all
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
