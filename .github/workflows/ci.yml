@@ -70,7 +70,7 @@ jobs:
       #       token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate docstring coverage report
-        run: invoke docstring-coverage
+        run: poetry run invoke docstring-coverage
 
       - name: Report docstring coverage
         if: ${{ github.event_name == 'pull_request'}}
