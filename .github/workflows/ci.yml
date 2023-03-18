@@ -70,7 +70,9 @@ jobs:
       #       token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate docstring coverage report
-        run: poetry run interrogate -v .template/mypkg/src -o docstring_coverage.txt
+        run: |
+          invoke instantiate-template
+          poetry run interrogate -v .template/mypkg/src -o docstring_coverage.txt
 
       - name: Report docstring coverage
         if: ${{ github.event_name == 'pull_request'}}
