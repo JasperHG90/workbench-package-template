@@ -77,12 +77,12 @@ jobs:
         run: |
           poetry run invoke instantiate-template
           export COVR=$(poetry run interrogate -v .template/mypkg/src)
-          export JSON='$(jq -n --arg ds "$COVR" '{"body": $ds}')'
+          export JSON=$(jq -n --arg ds "$COVR" '{"body": $ds}') 
           echo $JSON
           curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -X POST \
             https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments \
-            -d $JSON
+            -d '$JSON'
 
       # - name: Build docs
       #   if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main'}}
