@@ -76,9 +76,8 @@ jobs:
           COMMIT_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           poetry run invoke instantiate-template
-          export COVR=$(poetry run interrogate -v .template/mypkg/src)
+          export COVR=$(poetry run interrogate -v .template/mypkg/src | tail -n +3)
           export JSON=$(jq -n --arg ds "$COVR" '{"body": $ds}') 
-          export JSON='{"body": "What the fuck?"}'
           echo $JSON
           curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -X POST \
