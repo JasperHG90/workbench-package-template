@@ -21,6 +21,7 @@ permissions:
 jobs:
   # This job tests that the CC works
   ci:
+    permissions: write-all
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
