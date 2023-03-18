@@ -78,7 +78,7 @@ jobs:
           poetry run invoke instantiate-template
           export TITLE="### Docstring coverage"
           export TABLE="$(poetry run interrogate -v .template/mypkg/src | tail -n +3)"
-          export COVR="$TITLE"\\n\\n"$TABLE"
+          export COVR="$TITLE"<br><br>"$TABLE"
           export JSON=$(jq -n --arg ds "$COVR" '{"body": $ds}') 
           echo $JSON
           curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
