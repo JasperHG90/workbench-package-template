@@ -78,8 +78,7 @@ jobs:
           poetry run invoke instantiate-template
           export COVR=$(poetry run interrogate -v .template/mypkg/src)
           export JSON=$(jq -n --arg ds "$COVR" '{"body": $ds}') 
-          export JSON='"{ \\"body\\": \\"= Coverage for /home/runner/work/workbench-package-template/workbench-package-template/.template/mypkg/src/mypkg/ =\\n----------------------------------- Summary ------------------------------------\\n| Name | Total | Miss | Cover | Cover% |\\n|--------------------------|------------|-----------|------------|-------------|\\n| cli.py | 4 | 4 | 0 | 0% |\\n| config.py | 3 | 2 | 1 | 33% |\\n| example.py | 1 | 0 | 1 | 100% |\\n| exceptions.py | 1 | 1 | 0 | 0% |\\n| commands/config.py | 2 | 2 | 0 | 0% |\\n|--------------------------|------------|-----------|------------|-------------|\\n| TOTAL | 11 | 9 | 2 | 18.2% |\\n---------------- RESULT: PASSED (minimum: 10.0%, actual: 18.2%) ----------------\\" }"'
-          echo $JSON
+          export JSON='{"body": "What the fuck?"}'
           curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -X POST \
             https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments \
