@@ -69,16 +69,20 @@ jobs:
       #       coverageFile: coverage.xml
       #       token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Generate docstring coverage report
+        run: invoke docstring-coverage
+
       - name: Report docstring coverage
         if: ${{ github.event_name == 'pull_request'}}
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           COMMIT_SHA: ${{ github.event.pull_request.base.sha }}
+          DS_COV: $(cat docstring_coverage.txt)
         run: |
           curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -X POST \
             https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews \
-            -d '{"body":"This is close bla to perfect! Please address the suggested inline change.","event":"COMMENT"}'
+            -d '{"body":"${DS_COV}"}'
 
       # - name: Build docs
       #   if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main'}}
