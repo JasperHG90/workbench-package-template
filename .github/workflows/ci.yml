@@ -69,18 +69,14 @@ jobs:
       #       coverageFile: coverage.xml
       #       token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate docstring coverage report
-        run: |
-          poetry run invoke instantiate-template
-          poetry run interrogate -v .template/mypkg/src -o docstring_coverage.txt
-
       - name: Report docstring coverage
         if: ${{ github.event_name == 'pull_request'}}
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           COMMIT_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          export COVR=$(echo "### Docstring coverage \n\n$(tail -n +3 docstring_coverage.txt)")
+          poetry run invoke instantiate-template
+          export COVR=$(echo "### Docstring coverage \n\n$(poetry run interrogate -v .template/mypkg/src | tail -n +3 | sed 's/---------------- RESULT:/\n **Result**:/g')")
           export JSON=$(jq -n --arg ds "$COVR" '{"body": $ds}') 
           cat $JSON
           curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
