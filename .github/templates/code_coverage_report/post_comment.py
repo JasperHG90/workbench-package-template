@@ -26,8 +26,8 @@ def main(path_to_src: str, endpoint: str, token: str):
     del out_spl[-4]
     out_spl = "\n".join(out_spl[2:])
     table = markdown.markdown(out_spl, extensions=["markdown.extensions.tables"])
-    msg = f"""<h3>Docstring coverage</h3><br/><br/>
-    Report generated with [interrogate](https://interrogate.readthedocs.io/en/latest/)=={__version__}<br/>
+    msg = f"""<h3>Docstring coverage</h3><br/>
+    Report generated with <a href="https://interrogate.readthedocs.io/en/latest/">interrogate</a>=={__version__}<br/>
     {table}"""
     body={"body": msg}
     r = requests.post(
