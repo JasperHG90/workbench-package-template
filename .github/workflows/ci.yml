@@ -117,7 +117,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
   build_docs:
-    needs: [test, docstring_coverage]
+    needs: [tests, docstring_coverage]
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
