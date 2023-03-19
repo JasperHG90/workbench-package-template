@@ -78,6 +78,7 @@ jobs:
           path_to_src: '.template/mypkg'
           github_repo: ${GITHUB_REPOSITORY}
           pr_number: ${{ github.event.pull_request.number }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Report docstring coverage
       #   if: ${{ github.event_name == 'pull_request'}}

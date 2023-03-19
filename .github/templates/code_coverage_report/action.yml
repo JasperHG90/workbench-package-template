@@ -11,11 +11,14 @@ inputs:
     pr_number:
         description: "The PR number to which the output will be written"
         required: true
+    token:
+        description: "GH API token with ability to add comments to issues"
+        required: true
 
 runs:
   using: "composite"
   steps:
     - name: Post docstring coverage
       run: |
-        python post_comment.py ${{ inputs.path_to_src }} ${{ inputs.github_repository }} ${{ inputs.pr_number }} ${{ secrets.GITHUB_TOKEN }}
+        python post_comment.py ${{ inputs.path_to_src }} ${{ inputs.github_repository }} ${{ inputs.pr_number }} ${{ inputs.token }}
       shell: bash
