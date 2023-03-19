@@ -23,8 +23,10 @@ runs:
         pip install --upgrade pip
         python -m venv .gavenv
         source .gavenv/bin/activate
+      shell: bash
     - name: Install dependencies
       run: pip install "markdown<3.4.0" "requests==2.28.2" "interrogate==1.5.0"
+      shell: bash
     - name: Post docstring coverage
       run: |
         python .github/templates/code_coverage_report/post_comment.py ${{ inputs.path_to_src }} ${{ inputs.github_repository }} ${{ inputs.pr_number }} ${{ inputs.token }}
