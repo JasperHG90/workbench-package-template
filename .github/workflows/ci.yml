@@ -104,7 +104,7 @@ jobs:
 
       - name: Instantiate template
         run: |
-          cookiecutter . --no-input --output-dir .template/mypkg
+          cookiecutter . --no-input --output-dir .template
           ls -la .template/mypkg
 
       - name: Report docstring coverage
