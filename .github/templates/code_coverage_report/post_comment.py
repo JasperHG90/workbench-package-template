@@ -45,7 +45,7 @@ if __name__=="__main__":
     )
     parser.add_argument('path_to_src', type=str)
     parser.add_argument('github_repository', type=str)
-    parser.add_argument('pr_number', type=int)
+    parser.add_argument('pr_number', type=str)
     parser.add_argument('token', type=str)
     args=parser.parse_args()
     endpoint=f'https://api.github.com/repos/{args.github_repository}/issues/{args.pr_number}/comments'
