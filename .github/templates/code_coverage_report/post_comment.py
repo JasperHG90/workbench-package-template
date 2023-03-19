@@ -16,9 +16,9 @@ logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
 
-def main(endpoint: str, token: str):
+def main(path_to_src: str, endpoint: str, token: str):
     out = subprocess.check_output(
-        ["poetry", "run", "interrogate", "-v", "../../../.template/mypkg"]
+        ["poetry", "run", "interrogate", "-v", path_to_src]
     )
     out_spl = out.decode('utf-8').split('\n')
     out_spl[-2] = out_spl[-2].replace('-', '').strip().replace("RESULT:", "**RESULT**:")
@@ -43,9 +43,10 @@ if __name__=="__main__":
         prog="CodeCoverageReporter",
         description="Use this in GH actions to post the results of interrogate code coverage <https://github.com/econchick/interrogate> to a PR as a comment"
     )
+    parser.add_argument('path_to_src', type=str)
     parser.add_argument('github_repository', type=str)
     parser.add_argument('pr_number', type=int)
     parser.add_argument('token', type=str)
     args=parser.parse_args()
     endpoint=f'https://api.github.com/repos/{args.github_repository}/issues/{args.pr_number}/comments'
-    main(endpoint, args.token)
+    main(args.path_to_src, endpoint, args.token)

@@ -2,6 +2,9 @@ name: docstring_coverage_comment
 
 # Were we can define the inputs that our action will accept
 inputs:
+    path_to_src:
+        description: "Path to the source code"
+        required: true
     github_repository:
         description: "Name of the github repository"
         required: true
@@ -14,5 +17,5 @@ runs:
   steps:
     - name: Post docstring coverage
       run: |
-        python post_comment.py ${{ inputs.github_repository }} ${{ inputs.pr_number }} ${{ secrets.GITHUB_TOKEN }}
+        python post_comment.py ${{ inputs.path_to_src }} ${{ inputs.github_repository }} ${{ inputs.pr_number }} ${{ secrets.GITHUB_TOKEN }}
       shell: bash
