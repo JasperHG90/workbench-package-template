@@ -1,12 +1,13 @@
 #%%
 
-import markdown
-
 import subprocess
 import argparse
 import requests
 import json
 import logging
+
+import markdown
+from interrogate import __version__
 
 logger = logging.getLogger("code_coverage_reporter")
 handler = logging.StreamHandler()
@@ -25,7 +26,8 @@ def main(path_to_src: str, endpoint: str, token: str):
     del out_spl[-4]
     out_spl = "\n".join(out_spl[2:])
     table = markdown.markdown(out_spl, extensions=["markdown.extensions.tables"])
-    msg = f"""<h3>Docstring coverage</h3><br/>
+    msg = f"""<h3>Docstring coverage</h3><br/><br/>
+    Report generated with [interrogate](https://interrogate.readthedocs.io/en/latest/)=={__version__}<br/>
     {table}"""
     body={"body": msg}
     r = requests.post(
