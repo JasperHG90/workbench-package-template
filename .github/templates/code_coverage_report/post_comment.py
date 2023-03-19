@@ -18,7 +18,7 @@ logger.setLevel(logging.INFO)
 
 def main(path_to_src: str, endpoint: str, token: str):
     out = subprocess.check_output(
-        ["poetry", "run", "interrogate", "-v", path_to_src]
+        ["interrogate", "-v", path_to_src]
     )
     out_spl = out.decode('utf-8').split('\n')
     out_spl[-2] = out_spl[-2].replace('-', '').strip().replace("RESULT:", "**RESULT**:")
