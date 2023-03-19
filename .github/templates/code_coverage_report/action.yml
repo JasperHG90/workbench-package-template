@@ -20,5 +20,5 @@ runs:
   steps:
     - name: Post docstring coverage
       run: |
-        python .github/templates/code_coverage_report/post_comment.py ${{ inputs.path_to_src }} ${{ inputs.github_repository }} ${{ inputs.pr_number }} ${{ inputs.token }}
+        poetry run python .github/templates/code_coverage_report/post_comment.py ${{ inputs.path_to_src }} ${{ inputs.github_repository }} ${{ inputs.pr_number }} ${{ inputs.token }}
       shell: bash
