@@ -103,7 +103,9 @@ jobs:
         run: pip install cookiecutter
 
       - name: Instantiate template
-        run: cookiecutter . --no-input --output-dir .template/mypkg
+        run: |
+          cookiecutter . --no-input --output-dir .template/mypkg
+          ls -la .template/mypkg
 
       - name: Report docstring coverage
         uses: "./.github/templates/code_coverage_report"
