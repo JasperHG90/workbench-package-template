@@ -1,0 +1,18 @@
+name: docstring_coverage_comment
+
+# Were we can define the inputs that our action will accept
+inputs:
+    github_repository:
+        description: "Name of the github repository"
+        required: true
+    pr_number:
+        description: "The PR number to which the output will be written"
+        required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Post docstring coverage
+      run: |
+        python post_comment.py ${{ inputs.github_repository }} ${{ inputs.pr_number }} ${{ secrets.GITHUB_TOKEN }}
+      shell: bash
