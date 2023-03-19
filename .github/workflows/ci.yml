@@ -52,29 +52,6 @@ jobs:
       - name: Check pre-commit hook revs
         run: poetry run invoke check-pre-commit-versions
 
-  tests:
-    needs: static
-    runs-on: ${{ matrix.os }}\
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.9"]
-    steps:
-      - name: Check out repo
-        uses: actions/checkout@v2
-
-      - name: Install poetry
-        uses: snok/install-poetry@v1
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'poetry'
-
-      - name: Install dependencies
-        run: poetry install --with dev
-
       - name: Run tests
         run: poetry run invoke test
 
@@ -117,7 +94,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
   build_docs:
-    needs: [tests, docstring_coverage]
+    needs: [docstring_coverage]
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main'}}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
@@ -139,16 +117,13 @@ jobs:
         run: poetry install --only=docs
 
       - name: Build docs
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main'}}
         run: poetry run mkdocs build
 
       - name: Upload artifact
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main'}}
         uses: actions/upload-pages-artifact@v1
         with:
           path: 'site'
 
       - name: Deploy to GitHub Pages
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main'}}
         id: deployment
         uses: actions/deploy-pages@v1
