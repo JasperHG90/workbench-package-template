@@ -2,7 +2,7 @@ import logging
 import pathlib as plb
 import typing
 
-from pydantic import BaseSettings, validator
+from pydantic import validator
 from pydantic_yaml import YamlModel
 
 logger = logging.getLogger("{{ cookiecutter.__package_slug }}.config")

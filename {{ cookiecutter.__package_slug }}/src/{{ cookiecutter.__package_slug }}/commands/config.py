@@ -50,16 +50,14 @@ def create_config(
     ),
     env: typing.Optional[str] = typer.Option(
         None, help="Stage of production (dev/stg/prod)"
-    )
+    ),
 ):
     _output_path = plb.Path(output_path).absolute()
     if not _output_path.parent.exists():
         raise FileNotFoundError(
             f"Parent directory '{str(_output_path.parent)}' does not exist"
         )
-    config_out = pipeline_config.GlobalConfig(
-        env=_check_config_arg("env", env)
-    )
+    config_out = pipeline_config.GlobalConfig(env=_check_config_arg("env", env))
     with _output_path.open("w") as outFile:
         for line in config_out.yaml():
             outFile.write(line)
