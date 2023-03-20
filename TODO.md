@@ -1,18 +1,9 @@
 ## Tools
 
-- ~~Ruff (linter) https://github.com/charliermarsh/ruff~~
-
 ## Template
 
-- Upgrade name of pipeline script
 - Add generate /validate config to CLI
 - Pygrep hooks https://github.com/pre-commit/pygrep-hooks
-- Coverage
-- Pyproject format
-- Ruff
-- Check pyproject settings for all tools
-- Check all mkdocs extensions installed
-- Pyproject config
 - Add mkdocstrings https://mkdocstrings.github.io/usage/
 - In noxfile pytest: find way to only install main dependencies
 - Adding e.g. interrogate report to PR as comment https://github.com/marketplace/actions/add-pr-comment

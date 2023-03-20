@@ -26,8 +26,10 @@ This template uses the following tools for development, code quality & testing:
 - `Interrogate` for docstring coverage
 - `Deptry` to check for possible package conflicts
 - `Mypy` for type hint checking
-- `Nox` for testing across python versions
+- `Nox` & `nox-poetry` for testing across python versions
 - `Invoke` for defining re-usable / useful commands
+- `Python-semantic-release` for versioning based on git commits
+- `sync_with_poetry` pre-commit hook to keep parity between dev package versions and pre-commit revs.
 
 Additionally, this package template contains starter code using:
 
