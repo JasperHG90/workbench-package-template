@@ -17,6 +17,7 @@ This package template was adapted from [the py-pkgs cookiecutter template](https
 This template uses the following tools for development, code quality & testing:
 
 - `Poetry` (obviously)
+- `Pre-commit` to run static checks on code
 - `Black` for code formatting
 - `Isort` for sorting dependencies
 - `Codespell` for correcting spelling
@@ -27,6 +28,15 @@ This template uses the following tools for development, code quality & testing:
 - `Mypy` for type hint checking
 - `Nox` for testing across python versions
 - `Invoke` for defining re-usable / useful commands
+
+Additionally, this package template contains starter code using:
+
+- `typer` for creating CLIs
+- `pydantic_yaml` for creating/parsing YAML config files
+
+## Recipes
+
+Depending on how you want to use the template, you can find additional setup in the [recipes](recipes/) subsection of the docs.
 
 ## Usage
 
