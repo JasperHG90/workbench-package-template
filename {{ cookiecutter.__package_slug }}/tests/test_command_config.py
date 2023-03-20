@@ -19,11 +19,11 @@ class TestCheckConfigArg:
     def test_check_config_arg_raises(self):
         with pytest.raises(
             ValueError,
-            match="Input argument 'pipeline_setting' must either be passed",
+            match="Input argument 'docker_image_name' must either be passed",
         ):
-            if os.getenv("{{ cookiecutter.__package_slug }}_PIPELINE_SETTING") is not None:
-                del os.environ["{{ cookiecutter.__package_slug }}_PIPELINE_SETTING"]
-            _ = config._check_config_arg("pipeline_setting", None)
+            if os.getenv("{{ cookiecutter.__package_env_slug }}_DOCKER_IMAGE_NAME") is not None:
+                del os.environ["{{ cookiecutter.__package_env_slug }}_DOCKER_IMAGE_NAME"]
+            _ = config._check_config_arg("docker_image_name", None)
 
 
 def test_create_config():
@@ -35,8 +35,6 @@ def test_create_config():
                 f"{tmpdir}/config.yaml",
                 "--env",
                 "dev",
-                "--pipeline-setting",
-                "this",
             ],
         )
     assert result.exit_code == 0
