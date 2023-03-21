@@ -6,6 +6,7 @@ nav:
   - Changelog: changelog.md
   - Recipes:
     - 'Authenticating with private pypi repositories': recipes/authenticating-with-private-pypi.md
+    - 'Configuring authentication with private pypi repositories in a docker container': recipes/authenticating-private-pypi-docker.md
     - 'Building and pushing docker images to a private artifact store': recipes/building-and-pushing-docker-containers.md
     - 'Orchestrating flows with Prefect 2': recipes/orchestrating-flows-with-prefect2.md
   - Contributing: contributing.md
@@ -15,6 +16,15 @@ nav:
 theme:
   name: "material"
   logo: static/workbench.png
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
 
 plugins:
 - search
