@@ -148,7 +148,7 @@ def push_image(c, push_version = True):
 
 
 @task
-def build_and_push_image(c):
+def build_and_push_image(c, push_version = True):
     """Build and push docker image"""
     build_image(c)
-    push_image(c)
+    push_image(c, push_version = True)

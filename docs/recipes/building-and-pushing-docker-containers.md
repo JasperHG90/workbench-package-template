@@ -58,6 +58,14 @@ docker login -u _json_key_base64 -p $pwd https://europe-west4-docker.pkg.dev
 
 Update the `DOCKER_REGISTRY_URL` environment variable in the .env file. In this case, the registry URL is `europe-west4-python.pkg.dev` (NB: this is region-specific). This registry URL will be used to tag images so that docker knows where they should be pushed to.
 
+## Building and pushing docker files
+
+To build and push your dockerfiles, execute:
+
+```shell
+poetry run invoke build-and-push-image # --no-push-version
+```
+
 ### On Azure
 
 On Azure, you can create a container registry with at least a Standard SKU. Then, navigate to 'tokens'
@@ -84,6 +92,6 @@ There are a variety of ways to authenticate with private docker registries. The 
     DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REGISTRY_URL }}
   run: |
     docker login -u $DOCKER_REGISTRY_USERNAME -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_URL
-    poetry run invoke build-and-push-image
+    poetry run invoke build-and-push-image # --no-push-version
 ```
 
