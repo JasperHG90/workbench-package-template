@@ -1,98 +1,158 @@
 name: ci-cd
 
-on: [push, pull_request]
+on:
+  # Trigger the workflow on push or pull request on main branch
+  push:
+    branches:
+      - main
+      - staging
+  pull_request:
+    branches:
+      - main
+      - staging
+  workflow_dispatch:
 
 jobs:
-  ci:
-    # Set up operating system
+  static-checks:
     runs-on: ubuntu-latest
-
-    #if: ${{ !endsWith(github.ref, '/main') || !endsWith(github.ref, '/staging') }}
-    if: ${{ github.event_name == 'pull_request' || endsWith(github.ref, '/main') || endsWith(github.ref, '/staging') }}
-
-    # Define job steps
     steps:
-      - name: Check-out repository
+      - name: Check out repo
         uses: actions/checkout@v2
-
       - name: Install poetry
         uses: snok/install-poetry@v1
-
-      - name: Set up Python
+      - name: Set up Python {{cookiecutter.python_version}}
         uses: actions/setup-python@v4
         with:
           python-version: "{{cookiecutter.python_version}}"
-          cache: 'poetry'
-
-      - name: Set up authentication with private pypi
-        env:
-          GCPYPI_TOKEN: ${{ secrets.GCPYPI_TOKEN }}
-          GCPYPI_REPO: ${{ secrets.GCPYPI_REPO }}
-        run: |
-            poetry config repositories.gcpypi $GCPYPI_REPO
-            poetry config http-basic.gcpypi _json_key_base64 $GCPYPI_TOKEN
-
-      - name: Install package
-        run: poetry install
-
-      - name: Docstring coverage
-        run: poetry run interrogate -vv src
-
-      - name: Formatting - black
-        run: poetry run black .
-
-      - name: Linting - flake8
-        run: poetry run flake8 . --extend-exclude notebooks
-
-      - name: Type hints - mypy
-        run: poetry run mypy . --exclude notebooks --ignore-missing-imports
-
-      - name: Imports - isort
-        run: poetry run isort . --skip notebooks
-
-      - name: Test with pytest
-        run: poetry run pytest tests/ --cov={{ cookiecutter.__package_slug }} --cov-report=xml
-
-      - name: Use Codecov to track coverage
-        uses: codecov/codecov-action@v2
+      - name: Set up Nox
+        uses: excitedleigh/setup-nox@v2.0.0
+      - name: Set up Nox-poetry
+        run: pip install "$(poetry export --without-hashes --with dev | grep nox-poetry)"
+      - name: Run Nox
+        run: nox
+      - name: Upload coverage report
+        if: {% raw %}${{ github.event_name == 'pull_request'}}{% endraw %}
+        uses: actions/upload-artifact@v3
         with:
-          files: ./coverage.xml   # coverage report
+          name: code-coverage
+          path: coverage.xml
 
-      - name: Build documentation
-        run: poetry run make html --directory docs/
-  cd:
-    # Only run this job if the "ci" job passes
-    needs: ci
-
-    # Only run this job if new work is pushed to "main"
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
-    # Set up operating system
+  code-coverage-report:
+    needs: static-checks
+    if: {% raw %}${{ github.event_name == 'pull_request'}}{% endraw %}
     runs-on: ubuntu-latest
-
-    # Define job steps
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "{{ cookiecutter.python_version }}"
-
-      - name: Check-out repository
+      - name: Check out repo
         uses: actions/checkout@v2
+      - name: Set up Python {{cookiecutter.python_version}}
+        uses: actions/setup-python@v4
         with:
-          fetch-depth: 0
+          python-version: "{{cookiecutter.python_version}}"
+      - name: Download coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: code-coverage
+          path: coverage.xml
+      - name: Report code coverage
+        uses: orgoro/coverage@v3
+        with:
+          coverageFile: coverage.xml
+          token: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+  
+  docstring-coverage-report:
+    needs: static-checks
+    if: {% raw %}${{ github.event_name == 'pull_request'}}{% endraw %}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Set up Python {{cookiecutter.python_version}}
+        uses: actions/setup-python@v4
+        with:
+          python-version: "{{cookiecutter.python_version}}"
+      - name: Report docstring coverage
+        uses: JasperHG90/toiminnot/docstring-coverage-report@36a879e2095cbc31ae4ac81d6afdc7eb7c0212b7
+        with:
+          path_to_src: '.template/mypkg'
+          github_repository: ${GITHUB_REPOSITORY}
+          pr_number: {% raw %}${{ github.event.pull_request.number }}{% endraw %}
+          token: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
 
+  bump-package-version:
+    needs: static-checks
+    if: {% raw %}${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')}}{% endraw %}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
       - name: Install poetry
         uses: snok/install-poetry@v1
-
-      - name: Install package
-        run: poetry install
-
-      - name: Use Python Semantic Release to prepare release
-        env:
-          # This token is created automatically by GH Actions
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Python {{cookiecutter.python_version}}
+        uses: actions/setup-python@v4
+        with:
+          python-version: "{{cookiecutter.python_version}}"
+      - name: Install python semantic release
+        run: pip install "$(poetry export --without-hashes --with dev | grep python-semantic-release)"
+      - name: Set git env variables
         run: |
-            git config user.name github-actions
-            git config user.email github-actions@github.com
-            poetry run semantic-release publish
+          echo "GIT_COMMITTER_NAME=github-actions" >> $GITHUB_ENV
+          echo "GIT_COMMITTER_EMAIL=github-actions@github.com" >> $GITHUB_ENV
+      - name: Rebase on main
+        env:
+          GH_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+        run: git merge origin/main
+      - name: Pull changes from staging
+        if: {% raw %}${{ github.ref == 'refs/heads/staging' }}{% endraw %}
+        env:
+          GH_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+        run: git merge origin/staging
+      - name: Bump version (stg)
+        if: {% raw %}${{ github.ref == 'refs/heads/staging' }}{% endraw %}
+        env:
+          GH_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+        run: semantic-release publish --no-prerelease-patch --prerelease -D branch="staging"
+      - name: Bump version (prod)
+        if: {% raw %}${{ github.ref == 'refs/heads/main' }}{% endraw %}
+        env:
+          GH_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
+        run: semantic-release publish
+
+  deploy-docs:
+    needs: bump-package-version
+    if: {% raw %}${{ github.event_name == 'push' && github.ref == 'refs/heads/main'}}{% endraw %}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+      - name: Set up Python {{cookiecutter.python_version}}
+        uses: actions/setup-python@v4
+        with:
+          python-version: "{{cookiecutter.python_version}}"
+      - name: Install dependencies
+        run: poetry install --only=docs
+      - name: Build docs
+        run: poetry run mkdocs build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: 'site'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1

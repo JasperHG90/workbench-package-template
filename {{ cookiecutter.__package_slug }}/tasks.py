@@ -132,7 +132,7 @@ def build_image(c):
 
 
 @task
-def push_image(c, push_version = True):
+def push_image(c, push_version=True):
     """Push docker image"""
     env = os.environ[f"{ENV_PREFIX}_ENV"]
     registry_url = os.environ[f"{ENV_PREFIX}_DOCKER_REGISTRY_URL"]
@@ -148,7 +148,7 @@ def push_image(c, push_version = True):
 
 
 @task
-def build_and_push_image(c, push_version = True):
+def build_and_push_image(c, push_version=True):
     """Build and push docker image"""
     build_image(c)
-    push_image(c, push_version = True)
+    push_image(c, push_version=True)

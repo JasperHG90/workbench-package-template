@@ -26,7 +26,7 @@ def code_lint(session):
 def format_code(session):
     """Format code with black"""
     session.install("black", ".")
-    session.run("black", "-v", ".")
+    session.run("black", "-v", "--check", ".")
 
 
 @nox_poetry.session(reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
@@ -55,7 +55,10 @@ def code_spelling(session):
     """Check for misspellings in code"""
     session.install("codespell", ".")
     session.run(
-        "codespell", ".", "--skip", ".nox,.venv,.notebooks,docs,site,poetry.lock"
+        "codespell",
+        ".",
+        "--skip",
+        ".nox,.venv,.notebooks,.secrets,.git,docs,site,poetry.lock",
     )
 
 
@@ -76,6 +79,7 @@ def test(session):
         "poetry", "install", "--without", "dev", "--without", "docs", external=True
     )
     session.run("coverage", "run", "-m", "pytest", "tests")
+    session.run("coverage", "xml")
 
 
 @nox_poetry.session(reuse_venv=True, python=["{{ cookiecutter.python_version }}"])

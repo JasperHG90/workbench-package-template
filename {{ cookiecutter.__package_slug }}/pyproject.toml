@@ -68,7 +68,7 @@ mkdocs-jupyter = "^0.22.0"
 mkdocs-material = "<9.0.0"
 
 [tool.codespell]
-skip = ".nox,.venv,.notebooks,docs,site,poetry.lock"
+skip = ".nox,.venv,.notebooks,.git,.secrets,docs,site,poetry.lock"
 count = ''
 quiet-level = 3
 
