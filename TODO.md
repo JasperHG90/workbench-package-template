@@ -7,6 +7,7 @@
 - Add mkdocstrings https://mkdocstrings.github.io/usage/
 - In noxfile pytest: find way to only install main dependencies
 - Adding e.g. interrogate report to PR as comment https://github.com/marketplace/actions/add-pr-comment
+- GH actions validator https://github.com/mpalmer/action-validator
 
 Possibly:
 
