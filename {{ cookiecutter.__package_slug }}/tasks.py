@@ -132,7 +132,7 @@ def build_image(c):
 
 
 @task
-def push_image(c):
+def push_image(c, push_version = True):
     """Push docker image"""
     env = os.environ[f"{ENV_PREFIX}_ENV"]
     registry_url = os.environ[f"{ENV_PREFIX}_DOCKER_REGISTRY_URL"]
@@ -143,7 +143,8 @@ def push_image(c):
     c.run(f"docker push {tag_latest}")
     if env in ["stg", "prod"]:
         c.run(f"docker push {tag_sha}")
-        c.run(f"docker push {tag_version}")
+        if push_version:
+            c.run(f"docker push {tag_version}")
 
 
 @task
