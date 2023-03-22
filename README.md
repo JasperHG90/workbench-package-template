@@ -42,7 +42,7 @@ Depending on how you want to use the template, you can find additional setup in 
 
 ## Usage
 
-Please see the [documentation](https://py-pkgs-cookiecutter.readthedocs.io/en/latest/) for more detail on using `py-pkgs-cookiecutter`. We provide the fundamental steps below:
+Please see the [documentation](https://jasperhg90.github.io/workbench-package-template/) for more detail on using `workbench-package-template`. We provide the fundamental steps below:
 
 1. Install [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/):
 
@@ -50,44 +50,27 @@ Please see the [documentation](https://py-pkgs-cookiecutter.readthedocs.io/en/la
     pip install cookiecutter
     ```
 
-2. Generate a Python package structure using [`py-pkgs-cookiecutter`](https://github.com/py-pkgs/py-pkgs-cookiecutter):
+1. Generate a Python package structure using [`workbench-package-template`](https://github.com/JasperHG90/workbench-package-template):
 
     ```bash
-    cookiecutter https://github.com/py-pkgs/py-pkgs-cookiecutter.git
+    cookiecutter https://github.com/JasperHG90/workbench-package-template.git
     ```
 
-3. After responding to the prompts you should have a directory structure similar to that shown below. To learn more about the contents of this directory structure, please see the `py-pkgs-cookiecutter` [documentation](https://py-pkgs-cookiecutter.readthedocs.io/en/latest/).
+### First steps
 
-    ```text
-    pkg
-    ├── .github                    ┐
-    │   └── workflows              │ GitHub Actions workflow
-    │       └── ci-cd.yml          ┘
-    ├── .gitignore                 ┐
-    ├── .readthedocs.yml           │
-    ├── CHANGELOG.md               │
-    ├── CONDUCT.md                 │
-    ├── CONTRIBUTING.md            │
-    ├── docs                       │
-    │   ├── make.bat               │
-    │   ├── Makefile               │
-    │   ├── requirements.txt       │
-    │   ├── changelog.md           │
-    │   ├── conduct.md             │
-    │   ├── conf.py                │ Package documentation
-    │   ├── contributing.md        │
-    │   ├── index.md               │
-    │   └── usage.ipynb            │
-    ├── LICENSE                    │
-    ├── README.md                  ┘
-    ├── pyproject.toml             ┐
-    ├── src                        │
-    │   └── pkg                    │ Package source code, metadata,
-    │       ├── __init__.py        │ and build instructions
-    │       └── pkg.py             ┘
-    └── tests                      ┐
-        └── test_pkg.py            ┘ Package tests
-    ```
+1. Create a GH repository and do the following:
+
+1. Enable GH pages by going to Settings > Pages and selecting Source as 'GitHub actions', then selecting 'Static HTML'. Cancel the action that is created for you (this is already incorporated in the template).
+
+![](static/gh-pages.png)
+
+1. Run `poetry install`
+
+1. Check in the changes and push to main with the commit message 'ci skip'
+
+1. Run `poetry shell`
+
+1. Run `invoke set-up-pre-commit` to set up the pre-commit hooks
 
 ## Contributing
 
