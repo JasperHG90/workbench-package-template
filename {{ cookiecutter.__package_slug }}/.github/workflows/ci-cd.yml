@@ -1,7 +1,6 @@
 name: ci-cd
 
 on:
-  # Trigger the workflow on push or pull request on main branch
   push:
     branches:
       - main
@@ -55,7 +54,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: code-coverage
-          path: coverage.xml
+          #path: coverage.xml
       - name: Report code coverage
         uses: orgoro/coverage@v3
         with:
@@ -79,7 +78,7 @@ jobs:
       - name: Report docstring coverage
         uses: JasperHG90/toiminnot/docstring-coverage-report@36a879e2095cbc31ae4ac81d6afdc7eb7c0212b7
         with:
-          path_to_src: '.template/mypkg'
+          path_to_src: 'src'
           github_repository: ${GITHUB_REPOSITORY}
           pr_number: {% raw %}${{ github.event.pull_request.number }}{% endraw %}
           token: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
