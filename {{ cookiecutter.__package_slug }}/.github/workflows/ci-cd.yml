@@ -28,16 +28,35 @@ jobs:
       - name: Set up Nox-poetry
         run: pip install "$(poetry export --without-hashes --with dev | grep nox-poetry)"
       - name: Run Nox
-        run: nox
+        run: nox --stop-on-first-error --tags "static_check" "docs"
+
+  tests:
+    needs: static-checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+      - name: Set up Python {{cookiecutter.python_version}}
+        uses: actions/setup-python@v4
+        with:
+          python-version: "{{cookiecutter.python_version}}"
+      - name: Set up Nox
+        uses: excitedleigh/setup-nox@v2.0.0
+      - name: Set up Nox-poetry
+        run: pip install "$(poetry export --without-hashes --with dev | grep nox-poetry)"
+      - name: Run Nox
+        run: nox --stop-on-first-error --session test
       - name: Upload coverage report
         if: {% raw %}${{ github.event_name == 'pull_request'}}{% endraw %}
         uses: actions/upload-artifact@v3
         with:
           name: code-coverage
-          path: coverage.xml
+          path: coverage.xml    
 
   code-coverage-report:
-    needs: static-checks
+    needs: tests
     if: {% raw %}${{ github.event_name == 'pull_request'}}{% endraw %}
     runs-on: ubuntu-latest
     permissions:
@@ -62,7 +81,7 @@ jobs:
           token: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
   
   docstring-coverage-report:
-    needs: static-checks
+    needs: tests
     if: {% raw %}${{ github.event_name == 'pull_request'}}{% endraw %}
     runs-on: ubuntu-latest
     permissions:
@@ -85,7 +104,8 @@ jobs:
 
   bump-package-version:
     needs: static-checks
-    if: {% raw %}${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')}}{% endraw %}
+    if: {% raw %}${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')}}
+{% endraw %}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -127,7 +147,7 @@ jobs:
 
   deploy-docs:
     needs: bump-package-version
-    if: {% raw %}${{ github.event_name == 'push' && github.ref == 'refs/heads/main'}}{% endraw %}
+    if: {% raw %}${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'}}{% endraw %}
     runs-on: ubuntu-latest
     permissions:
       contents: write

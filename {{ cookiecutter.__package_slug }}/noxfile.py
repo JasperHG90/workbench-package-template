@@ -1,56 +1,56 @@
 import nox_poetry
 
 
-@nox_poetry.session(reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
+@nox_poetry.session(tags=["static_check"], reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
 def format_pyproject(session):
     """Format the project's pyproject.toml"""
     session.install("pyproject-fmt", ".")
     session.run("pyproject-fmt", "pyproject.toml")
 
 
-@nox_poetry.session(reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
+@nox_poetry.session(tags=["static_check"], reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
 def docstring_coverage(session):
     """Check coverage of docstrings"""
     session.install("interrogate", ".")
     session.run("interrogate", "-vv", "src")
 
 
-@nox_poetry.session(reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
+@nox_poetry.session(tags=["static_check"], reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
 def code_lint(session):
     """Code linting"""
     session.install("ruff", ".")
     session.run("ruff", "check", ".")
 
 
-@nox_poetry.session(reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
+@nox_poetry.session(tags=["static_check"], reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
 def format_code(session):
     """Format code with black"""
     session.install("black", ".")
     session.run("black", "-v", "--check", ".")
 
 
-@nox_poetry.session(reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
+@nox_poetry.session(tags=["static_check"], reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
 def security_lint(session):
     """Scan for security issues"""
     session.install("bandit", ".")
     session.run("bandit", "-v", ".")
 
 
-@nox_poetry.session(reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
+@nox_poetry.session(tags=["static_check"], reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
 def check_dependency_issues(session):
     """Check import / dependency issues"""
     session.install("deptry", ".")
     session.run("deptry", "src")
 
 
-@nox_poetry.session(reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
+@nox_poetry.session(tags=["static_check"], reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
 def sort_imports(session):
     """Sort imports"""
     session.install("isort", ".")
     session.run("isort", ".", "-v", "--diff")
 
 
-@nox_poetry.session(reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
+@nox_poetry.session(tags=["static_check"], reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
 def code_spelling(session):
     """Check for misspellings in code"""
     session.install("codespell", ".")
@@ -62,7 +62,7 @@ def code_spelling(session):
     )
 
 
-@nox_poetry.session(reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
+@nox_poetry.session(tags=["static_check"], reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
 def check_type_hints(session):
     """Check type hints"""
     session.install("mypy", ".")
@@ -82,7 +82,7 @@ def test(session):
     session.run("coverage", "xml")
 
 
-@nox_poetry.session(reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
+@nox_poetry.session(tags=["docs"], reuse_venv=True, python=["{{ cookiecutter.python_version }}"])
 def build_docs(session):
     """Build project documentation"""
     session.install("mkdocs", ".")
