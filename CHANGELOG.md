@@ -2,6 +2,22 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.2 (2023-03-23)
+### Build
+* **actions:** Separate static checks from tests and add tags to noxfile ([`4b70f8a`](https://github.com/JasperHG90/workbench-package-template/commit/4b70f8a19175837aa1e7deb11263716f32f71fcf))
+* **template:** Update CI CD pipelines and build tools ([`451acce`](https://github.com/JasperHG90/workbench-package-template/commit/451acce6e3ec2d19d88a3e904fb71ded42508fd3))
+* **cookiecutter:** Remove post hooks for deleted options ([`99ed8a9`](https://github.com/JasperHG90/workbench-package-template/commit/99ed8a950c60587ace3b538aa85631ca3e22a52f))
+* **cookiecutter:** Remove gh actions copy w/o render ([`d268087`](https://github.com/JasperHG90/workbench-package-template/commit/d2680877ff67ece5932c47b4c268ea701873f42c))
+
+### Fix
+* **template:** Mypy should ignore noxfile since nox_poetry induces overload errors ([`0736fc4`](https://github.com/JasperHG90/workbench-package-template/commit/0736fc48c468384ed9729925fe0f688a380b18ef))
+* **template:** Ci cd template ([`e9a1d78`](https://github.com/JasperHG90/workbench-package-template/commit/e9a1d78f251b52bb0a3f97fc041cdaadd608bd12))
+
+### Documentation
+* **static:** Add image of setting up pages ([`13bc1d2`](https://github.com/JasperHG90/workbench-package-template/commit/13bc1d2183d9158bd97032b6dcfc4618545261c2))
+* **readme:** Update readme ([`258f51f`](https://github.com/JasperHG90/workbench-package-template/commit/258f51ff0d276b8a521d4db20526844c6e0efded))
+* **todo:** Add todo for actions linter ([`627c1fc`](https://github.com/JasperHG90/workbench-package-template/commit/627c1fc299fa5484f9307480101385c67f7e0e86))
+
 ## v0.2.0 (2023-03-16)
 ### Feature
 * **tasks:** Add making docs task ([`658fd9d`](https://github.com/JasperHG90/workbench-package-template/commit/658fd9d70606c8daefc16486de47d69c6b2f64ef))
