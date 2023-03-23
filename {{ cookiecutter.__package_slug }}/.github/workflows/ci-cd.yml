@@ -103,7 +103,7 @@ jobs:
           token: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}
 
   bump-package-version:
-    needs: static-checks
+    needs: tests
     if: {% raw %}${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')}}
 {% endraw %}
     runs-on: ubuntu-latest
