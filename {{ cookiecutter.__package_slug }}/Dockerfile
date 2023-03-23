@@ -6,4 +6,4 @@ COPY README.md /app/README.md
 
 RUN pip install .
 
-ENTRYPOINT [ "pipeline" ]
+ENTRYPOINT [ "{{ cookiecutter.__package_slug }}" ]
