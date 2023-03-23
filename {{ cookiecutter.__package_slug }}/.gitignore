@@ -153,3 +153,6 @@ dmypy.json
 
 # Ruff
 .ruff_cache
+
+### Replace in post hook
+!.env
