@@ -99,6 +99,9 @@ extend_skip = [".notebooks", ".nox", ".venv"]
 exclude = "^.notebooks/"
 ignore_missing_imports = true
 
+[tool.bandit]
+skips = ['B101']
+
 [tool.ruff]
 ignore = ["E501"]
 extend-exclude = [
