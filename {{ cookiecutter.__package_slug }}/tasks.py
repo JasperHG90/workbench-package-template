@@ -26,7 +26,7 @@ logger.setLevel(logging.DEBUG)
 
 load_dotenv()
 
-ENV_PREFIX = "MYPKG"  # Environment variable prefix
+ENV_PREFIX = "{{cookiecutter.__package_env_slug}}"  # Environment variable prefix
 current_dir = plb.Path(__file__).absolute().parent
 
 if os.getenv(f"{ENV_PREFIX}_ENV") == "prod" and os.getenv("RUNNER_OS") is None:
